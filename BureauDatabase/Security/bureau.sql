@@ -1,3 +1,2 @@
-﻿CREATE SCHEMA [bureau]
-    AUTHORIZATION [HEALTHCARE\ahne];
+﻿CREATE SCHEMA [bureau];
 

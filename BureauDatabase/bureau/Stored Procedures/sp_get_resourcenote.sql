@@ -12,6 +12,6 @@ select
 	,override_bg_colour as BGColour
 	,bur_comments as Comments
 from
-	 WDHB_Research.bureau.TRequestResource with (nolock)
+	 bureau.TRequestResource with (nolock)
 where
 	 rr_id = @reqid
