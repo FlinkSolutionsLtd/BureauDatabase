@@ -13,7 +13,7 @@
     [HCA]           DECIMAL (6, 1) NULL,
     [CNM]           DECIMAL (6, 1) NULL,
     [Coord_Name]    VARCHAR (255)  NULL,
-    [comments]      VARCHAR (MAX)  NULL,
+    [comments]      VARCHAR (1000) NULL,
     [create_dttm]   DATETIME       CONSTRAINT [DF_Daily_create_dttm] DEFAULT (getdate()) NOT NULL,
     [create_user]   VARCHAR (50)   CONSTRAINT [DF_Daily_create_user] DEFAULT ('bureau_system') NOT NULL,
     [modif_dttm]    DATETIME       CONSTRAINT [DF_Daily_modif_dttm] DEFAULT (getdate()) NOT NULL,
@@ -21,6 +21,8 @@
     [is_deleted]    SMALLINT       CONSTRAINT [DF_Daily_is_deleted] DEFAULT ((0)) NOT NULL,
     CONSTRAINT [PK_bureau.DailyStaffing] PRIMARY KEY CLUSTERED ([ds_id] ASC) WITH (FILLFACTOR = 90)
 );
+
+
 
 
 GO

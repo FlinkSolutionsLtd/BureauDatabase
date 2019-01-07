@@ -38,7 +38,7 @@ select
 	,HCA
 	,CNM
 	,Coord_Name
-	,comments
+	,cast(comments as varchar(2000)) as comments
 	,r.create_dttm
 	,r.create_user
 	,r.modif_dttm

@@ -10,6 +10,21 @@
 	with recompile
 as
 
+/*
+
+-- example call
+exec [bureau].[sp_get_bureauview]
+	 @locid = -1
+	,@status = 16
+	,@shift = 'N'
+	,@start = '2019-01-01'
+	,@end = '2019-01-09'
+	,@proc_rrid = 0
+	,@UserID =''
+	,@hosp = 0
+
+*/
+
 if @proc_rrid > 0
 	begin
 		exec [bureau].[sp_edit_requeststatus] 'PROC',@UserID,@proc_rrid

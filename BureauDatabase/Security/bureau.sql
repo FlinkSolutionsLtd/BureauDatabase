@@ -1,2 +1,5 @@
-﻿CREATE SCHEMA [bureau];
+﻿CREATE SCHEMA [bureau]
+    AUTHORIZATION [dbo];
+
+
 
