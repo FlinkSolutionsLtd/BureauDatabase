@@ -66,6 +66,10 @@
     <Folder Include="bureau\Stored Procedures\" />
     <Folder Include="Security\" />
     <Folder Include="Snapshots" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Views\" />
+    <Folder Include="dbo\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DefaultSchemaCompare.scmp" />
@@ -118,8 +122,13 @@
     <Build Include="bureau\Stored Procedures\rp_casual_staff_usage.sql" />
     <Build Include="bureau\Stored Procedures\sp_get_staffing_summary_eww.sql" />
     <Build Include="Security\bureau.sql" />
+    <Build Include="dbo\Tables\dim_date.sql" />
+    <Build Include="dbo\Views\vdimRC.sql" />
+    <Build Include="dbo\Functions\fMultiValueParam.sql" />
+    <Build Include="bureau\Stored Procedures\sp_edit_requestresource_cancel.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="Script.PostDeployment1.sql" />
+    <PostDeploy Include="DISABLED-InitialSetupScript.PostDeployment.sql" />
+    <None Include="CMHv1.1.PostDeployment.sql" />
   </ItemGroup>
 </Project>

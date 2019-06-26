@@ -70,8 +70,8 @@ select
 
 	,case
 	 when override_colour is not null then override_colour
-	 when OK = 'OS' or OK = 'CX' then 'MediumPurple'
-	 when OK = 'Y' then 'Red'
+	 when OK = 'OS' or OK = 'CX' or OK = 'RE' then 'MediumPurple'
+	 when OK = 'Y' then 'ForestGreen' --'Red'
 	 when OK = 'E' then 'ForestGreen'
 	 when OK = '?' then 'Black'
 	 when OK = 'N' then 'Blue'
@@ -178,12 +178,15 @@ from
 			,case
 			 when rrstatus.description = 'Filled' then 
 				case
-				when rsource.description = 'Internal' then 'OS'
+				when rsource.description = 'Internal' then 'OS'				
 				when rsource.description = 'Bureau - Internal' then 'Y'
-				when rsource.description like 'External%' then 'E'
+				when rsource.description like 'External%' then 'Y' --'E'
+				else 'Y' --just filled in general is Y
 				end
 			 when rrstatus.description like 'Unable to Fill%' then 'N'
 			 when rrstatus.description like 'Cancel%' then 'CX'
+			 when rrstatus.description = 'Own Staff' then 'OS'
+			 when rrstatus.description = 'Redeployed' then 'RE'
 			 else '?'
 			 end as OK
 			,isnull(resp_hrs,hrs) as HRS

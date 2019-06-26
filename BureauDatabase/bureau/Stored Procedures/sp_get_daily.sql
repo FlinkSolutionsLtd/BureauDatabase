@@ -48,9 +48,10 @@ select
 		+ convert(varchar(6),dates.shift_date,6) + '<br>'
 		+ case when ct.shift_code = 'D' then 'Day' when ct.shift_code='E' then 'Evening' when ct.shift_code='N' then 'Night' end as shift_display
 	,row_number() over (partition by '' order by dates.shift_date, ct.shift_code) as seq_number
+	,ct.sort_order
 from
 	 bureau.TLocation as l with (nolock) 
-	 cross join (select 'D' as shift_code union select 'E' as shift_code union select 'N' as shift_code) as ct
+	 cross join (select 'D' as shift_code, 2 as sort_order union select 'E' as shift_code, 3 union select 'N' as shift_code, 1) as ct
 	 cross join dates
 	 left join bureau.TDailyStaffing as r with (nolock)	
 		on r.loc_id = l.loc_id
@@ -61,10 +62,10 @@ from
 where
 	 l.loc_id = @lid
 	 and (
-			(ct.shift_code = 'D' and dates.shift_date = @edate) --the end date's morning shift only
+			(ct.shift_code = 'N' and dates.shift_date = @edate) --the end date's night shift only
 			or (dates.shift_date = @sdate) --the start date, each shift
 			or (dates.shift_date > @sdate and dates.shift_date < @edate) --or it falls between the start/end dates exclusive
 		)
 order by
 	 dates.shift_date
-	,ct.shift_code
+	,ct.sort_order

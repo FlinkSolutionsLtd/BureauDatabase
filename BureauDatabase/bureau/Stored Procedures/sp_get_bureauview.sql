@@ -57,18 +57,12 @@ if @proc_rrid > 0
 		 end as status_font_weight
 		,case
 		 when rrstatus.description = 'Processing' or rr.status = 0 then 'Yellow'
-		 when rrstatus.description like '%cancel%' then 'MediumPurple'
+		 when rrstatus.description like '%cancel%' or rrstatus.description in ('Own Staff','Redeployed') then 'MediumPurple'
 		 when rrstatus.description like 'Unable to Fill%' then 'Blue'
-		 when rtype.description = 'Internal' then 'MediumPurple'
-		 when rtype.description = 'Bureau - Internal' then 'Red'
-		 when rtype.description like 'External%' then 'ForestGreen'
+		 when rtype.description is not null then 'Green' --all other options are "filled"
 		 else 'White'
 		 end as status_box_color
-		,case 
-		 when lk.description = 'North Shore' or rr.misc_hosp_lk_id = 28 then '[NSH] ' 
-		 when lk.description = 'Waitakere' or rr.misc_hosp_lk_id = 29 then '[WTK] '
-		 when lk.description = 'Mental Health' then '[MH] '
-		 end + isnull(l.loc_description,rr.loc_freetext) as loc_description
+		,isnull(lk.description + ' - ','') + isnull(l.loc_description,rr.loc_freetext) as loc_description
 		,l.trendcare_code
 		,rr.shift_date
 		,rr.start_time

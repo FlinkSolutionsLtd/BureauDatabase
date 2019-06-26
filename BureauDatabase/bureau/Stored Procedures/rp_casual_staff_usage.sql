@@ -1,39 +1,18 @@
 ﻿
-CREATE procedure bureau.rp_casual_staff_usage
+CREATE procedure [bureau].[rp_casual_staff_usage]
 	 @start as datetime
+     ,@end as datetime
 	,@Division as varchar(255)
 as
 
 declare @startdate as datetime;
 set datefirst 1;
 
---set first monday of the year
-set @startdate = cast(cast(year(getdate()) as char(4)) + '-01-01' as datetime)
-if datepart(weekday,@startdate) > 1
-	begin
-		set @startdate = dateadd(day,8 - datepart(weekday,@startdate),@startdate)
-	end
-
-;with prevdates as
-(
-	select @startdate as dt, dateadd(day,13,@startdate) as edt
-	union all select dateadd(day,-14,dt), dateadd(day,-14,edt) from prevdates where dt > @start
-)
-,nextdates as
-(
-	select dateadd(day,14,@startdate) as dt, dateadd(day,27,@startdate) as edt
-	union all select dateadd(day,14,dt), dateadd(day,14,edt) from nextdates where dateadd(day,14,edt) <= getdate()
-)
-,fortnights as
-(
-	select * from prevdates
-	union select * from nextdates
-)
-,t as
+with t as
 (
 	select
-		 dt
-		,edt
+		 shift_date as dt
+		,shift_date as edt
 		,[loc_description]
 		,[rc_code]
 		,rc.Service
@@ -49,8 +28,6 @@ if datepart(weekday,@startdate) > 1
 		 end as req_type
 		,[source]
 	from 
-		 fortnights
-		 inner join 
 		 (
 			select
 				'R' + cast(rr.rr_id as varchar(10)) as rec_id
@@ -87,14 +64,13 @@ if datepart(weekday,@startdate) > 1
 				and rrstatus.description not like 'Cancel%'
 				and rr.create_dttm >= '2016-07-25' --go-live date
 		 ) as ba
-			on ba.shift_date between dt and edt
-		 left join vdimRC as rc
+		 left join (select 'All' as Service, 'All' as Division, '???-????' as RC) as rc
 			on ba.rc_code = rc.RC
 	where
 		 1 = 1
 		 and source <> 'Internal' --exclude filled by internal staff members
 		 and loc_id is not null --exclude non-standard locations
-		 and (Division = @Division or @Division = '-All Divisions-')
+		 and (Division = @Division or @Division = 'All')
 	group by
 		 [loc_id]
 		,[loc_description]
@@ -107,8 +83,7 @@ if datepart(weekday,@startdate) > 1
 		 else [req_type]
 		 end
 		,[source]
-		,dt
-		,edt
+		,shift_date
 		,rc.Service
 		,rc.Division
 )

@@ -49,6 +49,11 @@ select
 	
 	,rr.comments
 	,rr.bur_comments
+
+	,case
+	 when rr.status between 16 and 18 then 0
+	 else 1
+	 end as isCancellable
 from
 	 bureau.TLocation as l with (nolock)
 	 full outer join 
@@ -107,3 +112,4 @@ group by
 	,rr.bur_comments
 	,rtype.description
 	,rr.resp_staff_freetext
+	,rr.status
